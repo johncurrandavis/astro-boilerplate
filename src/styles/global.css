@@ -1,24 +1,4 @@
 
 @import "tailwindcss";
 
-body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-family: 'Inter', sans-serif;
-  transition: all 0.3s;
-}
-
-button {
-  transition: all 0.3s;
-}
-
-input {
-  border: 1px solid hsl(var(--border));
-  background-color: hsl(var(--input));
-  color: hsl(var(--foreground));
-}
-
-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px hsl(var(--ring));
-}
+@import "./themes.css";

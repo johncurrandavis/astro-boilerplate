@@ -1,5 +1,8 @@
 import { useState, useEffect } from "preact/hooks";
 
+/* --------------------------------------------------
+   Theme definitions (same as before)
+-------------------------------------------------- */
 const themes = {
   warmVintage: {
     name: "Warm & Vintage",
@@ -16,12 +19,13 @@ const themes = {
       "--muted-foreground": "25 10% 40%",
       "--accent": "10 40% 60%",
       "--accent-foreground": "0 0% 98%",
+      "--destructive": "0 70% 45%",
+      "--destructive-foreground": "0 0% 98%",
       "--border": "30 30% 80%",
       "--input": "35 20% 85%",
       "--ring": "25 45% 35%",
     },
   },
-
   coolModern: {
     name: "Cool & Modern",
     colors: {
@@ -44,7 +48,6 @@ const themes = {
       "--ring": "210 60% 45%",
     },
   },
-
   naturalOrganic: {
     name: "Natural & Organic",
     colors: {
@@ -67,7 +70,6 @@ const themes = {
       "--ring": "120 25% 40%",
     },
   },
-
   playfulCreative: {
     name: "Playful & Creative",
     colors: {
@@ -90,7 +92,6 @@ const themes = {
       "--ring": "280 70% 65%",
     },
   },
-
   darkElegant: {
     name: "Dark & Elegant",
     colors: {
@@ -115,67 +116,119 @@ const themes = {
   },
 };
 
-export default function ThemeSelector() {
+/* --------------------------------------------------
+   Playground component
+-------------------------------------------------- */
+export default function ThemePlayground() {
   const [theme, setTheme] = useState("warmVintage");
 
-  // Detect system theme and apply user choice
   useEffect(() => {
     if (typeof window === "undefined") return;
-
-    const savedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const initialTheme = savedTheme
-      ? savedTheme
-      : prefersDark
-      ? "darkElegant"
-      : "warmVintage";
-
-    setTheme(initialTheme);
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
     const root = document.documentElement;
     const colors = themes[theme].colors;
 
-    // Add fade class
     root.classList.add("theme-transition");
+    for (const key in colors) root.style.setProperty(key, colors[key]);
 
-    // Apply theme colors
-    for (const key in colors) {
-      root.style.setProperty(key, colors[key]);
-    }
-
-    // Remove fade class after animation
-    const timeout = setTimeout(() => {
-      root.classList.remove("theme-transition");
-    }, 1200); // match animation duration
-
-    localStorage.setItem("theme", theme);
+    const timeout = setTimeout(() => root.classList.remove("theme-transition"), 1200);
+    localStorage?.setItem("theme", theme);
     return () => clearTimeout(timeout);
   }, [theme]);
 
-  const selectStyle = {
-    backgroundColor: `hsl(var(--card))`,
-    color: `hsl(var(--card-foreground))`,
-    borderColor: `hsl(var(--border))`,
-    boxShadow: `0 0 0 2px hsl(var(--ring) / 0.1)`,
-    transition: "all 0.3s ease",
-  };
-
   return (
-    <select
-      value={theme}
-      onChange={(e) => setTheme(e.target.value)}
-      style={selectStyle}
-      className="px-3 py-1.5 rounded text-sm font-medium outline-none hover:shadow-md focus:shadow-lg"
+    <div
+      className="min-h-screen transition-all duration-1000"
+      style={{
+        backgroundColor: `hsl(var(--background))`,
+        color: `hsl(var(--foreground))`,
+      }}
     >
-      {Object.keys(themes).map((key) => (
-        <option key={key} value={key}>
-          {themes[key].name}
-        </option>
-      ))}
-    </select>
+      <div className="max-w-5xl mx-auto px-6 py-12 space-y-10">
+        <header className="flex justify-between items-center">
+          <h1 className="text-3xl font-serif">Theme Playground</h1>
+
+          <select
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
+            className="px-3 py-2 rounded-md border text-sm font-medium outline-none hover:shadow-md transition-all"
+            style={{
+              backgroundColor: `hsl(var(--card))`,
+              color: `hsl(var(--card-foreground))`,
+              borderColor: `hsl(var(--border))`,
+            }}
+          >
+            {Object.keys(themes).map((key) => (
+              <option key={key} value={key}>
+                {themes[key].name}
+              </option>
+            ))}
+          </select>
+        </header>
+
+        <section className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+          <button
+            className="rounded-md px-4 py-2 font-medium transition-colors"
+            style={{
+              backgroundColor: `hsl(var(--primary))`,
+              color: `hsl(var(--primary-foreground))`,
+            }}
+          >
+            Primary Button
+          </button>
+
+          <button
+            className="rounded-md px-4 py-2 font-medium border transition-colors"
+            style={{
+              backgroundColor: `hsl(var(--secondary))`,
+              color: `hsl(var(--secondary-foreground))`,
+              borderColor: `hsl(var(--border))`,
+            }}
+          >
+            Secondary
+          </button>
+
+          <button
+            className="rounded-md px-4 py-2 font-medium transition-colors"
+            style={{
+              backgroundColor: `hsl(var(--accent))`,
+              color: `hsl(var(--accent-foreground))`,
+            }}
+          >
+            Accent
+          </button>
+        </section>
+
+        <section className="grid sm:grid-cols-2 gap-6 mt-10">
+          <div
+            className="rounded-lg p-6 border shadow-sm"
+            style={{
+              backgroundColor: `hsl(var(--card))`,
+              color: `hsl(var(--card-foreground))`,
+              borderColor: `hsl(var(--border))`,
+            }}
+          >
+            <h2 className="text-xl font-semibold mb-2">Card Title</h2>
+            <p className="text-sm opacity-80">
+              This card adapts to the selected theme’s background and text
+              colors. Borders and shadows adjust automatically too.
+            </p>
+          </div>
+
+          <div
+            className="rounded-lg p-6 border shadow-sm"
+            style={{
+              backgroundColor: `hsl(var(--muted))`,
+              color: `hsl(var(--muted-foreground))`,
+              borderColor: `hsl(var(--border))`,
+            }}
+          >
+            <h2 className="text-xl font-semibold mb-2">Muted Section</h2>
+            <p className="text-sm opacity-80">
+              Useful for showing subtle differences in background or tone.
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
   );
 }
