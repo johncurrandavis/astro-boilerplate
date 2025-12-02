@@ -7,13 +7,18 @@ import ThemePlayground from "../components/ThemePlayground.jsx";
 ---
 
 <Layout>
-  <section class="relative min-h-screen items-center flex py-20 md:py-16 overflow-hidden">
+  <!-- Hero Section (no top padding → sits flush under navbar) -->
+  <section class="relative overflow-hidden">
     <LandingHero />
+  </section>
+
+  <!-- Spacing between hero and next section -->
+  <section class="mt-24">
     <FeaturedWorkScroll />
   </section>
 
-  <section>
+  <!-- Optional playground, spaced properly -->
+  <section class="mt-24">
     <ThemePlayground />
   </section>
-
 </Layout>
