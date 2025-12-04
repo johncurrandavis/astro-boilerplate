@@ -2,26 +2,21 @@
 import Layout from '../layouts/Layout.astro';
 import LandingHero from '../components/LandingHero.astro';
 import FeaturedWorkScroll from '../components/FeaturedWorkScroll.astro';
-
-import ThemePlayground from "../components/ThemePlayground.jsx";
+import FeaturedGallery from '../components/FeaturedGallery.astro';---
 ---
 
 <Layout>
-  <!-- Hero Section -->
+
   <section>
     <LandingHero />
   </section>
 
-  <!-- Spacing between hero and next section -->
   <section>
     <FeaturedWorkScroll />
   </section>
 
-
-  <!-- Optional playground, spaced properly
-  <section class="mt-24">
-    <ThemePlayground />
-  </section> -->
-
+  <section>
+    <FeaturedGallery />
+  </section>
 
 </Layout>
